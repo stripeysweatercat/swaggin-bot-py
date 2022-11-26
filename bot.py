@@ -1,5 +1,4 @@
 import discord
-import config
 import asyncio
 import os
 
@@ -32,6 +31,6 @@ async def load():
 
 async def main():
     await load()
-    await client.start(config.TOKEN)
 
+asyncio(main())
 client.run(os.getenv('DISCORD_TOKEN'))
