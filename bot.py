@@ -31,6 +31,6 @@ async def load():
 
 async def main():
     await load()
+    await client.start(os.getenv('DISCORD_TOKEN'))
 
-asyncio(main())
-client.run(os.getenv('DISCORD_TOKEN'))
+asyncio.run(main())
