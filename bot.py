@@ -31,6 +31,6 @@ async def load():
 
 async def main():
     await load()
-    await client.start(os.getenv('DISCORD_TOKEN'))
 
 asyncio.run(main())
+client.run(os.getenv('MTAzNDczMTQ2NTY1ODg2NzgwNQ.GW63JZ.d6anCiFiT_f7upEHiTaMgn720mWRo03N37kdts'))
