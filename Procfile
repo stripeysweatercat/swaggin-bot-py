@@ -1,1 +1,1 @@
-worker: bot-env\\Scripts\\activate.bat
+worker: python bot.py
