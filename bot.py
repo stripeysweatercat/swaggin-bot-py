@@ -33,4 +33,4 @@ async def main():
     await load()
 
 asyncio.run(main())
-client.run(os.getenv('DISCORD_TOKEN'))
+client.run(os.environ.get('DISCORD_TOKEN'))

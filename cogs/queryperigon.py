@@ -1,35 +1,46 @@
-import youtube_api.ytapi.call as call
 import requests
 import discord
 import os
 from discord.ext import commands
+from googleapiclient.discovery import build
 
 # Gets the absolute path of call.py to fetch statistics
-absolute_path = os.path.dirname(__file__)
-relative_path = 'youtube_api\\ytapi\\call.py'
-full_path = os.path.join(absolute_path, relative_path)
-os.startfile(full_path)
-response = call.response
+api_key = os.environ.get('YOUTUBE_API_KEY')
+youtube = build('youtube', 'v3', developerKey=api_key)
 
-class QueryPerigon(commands.Cog):
+class QueryStatistics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
     @commands.Cog.listener()
     async def on_ready(self):
-        print('QueryPerigon cog loaded')
+        print('Query Statistics cog loaded')
 
     @commands.command()
-    async def queryperigon(self, ctx):
+    async def querystats(self, ctx, userID):
+        requestStats = youtube.channels().list(
+            part='statistics',
+            id=f'{userID}'
+        )
+        requestIMG = youtube.channels().list(
+            part='snippet',
+            id=f'{userID}'
+        )
+
+        responseStats = requestStats.execute()
+        responseIMG = requestIMG.execute()
+        responseUsername = responseIMG['items'][0]['snippet']['title']
+        responsePFP = responseIMG['items'][0]['snippet']['thumbnails']['medium']['url']
+
         embed = discord.Embed(
-            colour=discord.Colour.blue,
-            title='Perigon Statistics',
+            title=f'{responseUsername} Statistics',
             url='https://www.youtube.com/channel/UCNCYTj2rinrmtdRcp8NlbHw',
             )
-        embed.add_field(name='Subscribers', value=response['items'][0]['statistics']['subscriberCount'], inline=False)
-        embed.add_field(name='Total Views', value=response['items'][0]['statistics']['viewCount'], inline=False)
-        embed.add_field(name='Total Videos', value=response['items'][0]['statistics']['videoCount'], inline=False)
+        embed.set_thumbnail(url=f'{responsePFP}')
+        embed.add_field(name='Subscribers', value=responseStats['items'][0]['statistics']['subscriberCount'], inline=False)
+        embed.add_field(name='Total Views', value=responseStats['items'][0]['statistics']['viewCount'], inline=False)
+        embed.add_field(name='Total Videos', value=responseStats['items'][0]['statistics']['videoCount'], inline=False)
         await ctx.channel.send(embed=embed)
 
 async def setup(bot):
-    await bot.add_cog(QueryPerigon(bot))
+    await bot.add_cog(QueryStatistics(bot))
