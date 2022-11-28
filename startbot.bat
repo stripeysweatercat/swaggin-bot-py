@@ -1,3 +1,3 @@
-bot-env\Scripts\activate
+bot-env\Scripts\activate.bat
 python bot.py
 PAUSE
