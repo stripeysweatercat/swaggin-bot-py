@@ -35,7 +35,7 @@ async def load():
 
 @tasks.loop(seconds=10)
 async def change_status():
-    await client.change_presence(activity=discord.Game(next(status)))
+    await client.change_presence(activity=discord.Activity(name='swaggin'))
 
 
 async def main():
