@@ -1,8 +1,10 @@
 from googleapiclient.discovery import build
 import os
 
-userID = 'UCNCYTj2rinrmtdRcp8NlbHw'
-austaID = 'UCX09eCnynW54idQDo1vEEqw'
+userID = os.environ.get('PERIGON_ID')
+austaID = os.environ.get('AUSTAMATE_ID')
+rocketID = os.environ.get('ROCKET_ID')
+fibesID = os.environ.get('FIBES_ID')
 userName = 'schafer5'
 api_key = os.environ.get('YOUTUBE_API_KEY')
 youtube = build('youtube', 'v3', developerKey=api_key)
@@ -22,8 +24,14 @@ requestActivity = youtube.activities().list(
     channelId=f'{userID}'
 )
 
+requestVideo = youtube.videos().list(
+    part='snippet',
+    id='XZjR9xvd98Y'
+)
+
 responseIMG = requestIMG.execute()
 responseActivity = requestActivity.execute()
+responseVideo = requestVideo.execute()
 
 responseUsername = responseIMG['items'][0]['snippet']['title']
 responsePFP = responseIMG['items'][0]['snippet']['thumbnails']['medium']['url']
@@ -31,4 +39,4 @@ responsePFP = responseIMG['items'][0]['snippet']['thumbnails']['medium']['url']
 #videoId = responseActivity['items'][0]['contentDetails']['upload']['videoId']
 videoTitle = responseActivity['items'][0]['snippet']['thumbnails']['maxres']['url']
 
-print(videoTitle)
+print(responseVideo)
